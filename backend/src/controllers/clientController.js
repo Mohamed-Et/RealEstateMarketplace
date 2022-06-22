@@ -1,14 +1,21 @@
 const Client = require('../models/Client');
-
+const Op = require('sequelize').Op;
+//get all
 exports.getAll = async (req, res) => {
   try {
-    const clients = await Client.findAll();
+    const clients = await Client.findAll({
+      where: {
+        status: {
+          [Op.not]: 'deleted',
+        },
+      },
+    });
     res.status(200).json(clients);
   } catch (error) {
     res.send(error);
   }
 };
-
+//get by ID
 exports.getByID = async (req, res) => {
   const idClient = req.params.id;
   try {
@@ -18,8 +25,25 @@ exports.getByID = async (req, res) => {
     res.send(error);
   }
 };
-
+//get by RefUpdateID
+exports.getByRefID = async (req, res) => {
+  const refUpdate = req.params.refId;
+  try {
+    const client = await Client.findAll({ where: { refUpdate: refUpdate } });
+    res.status(200).json(client);
+  } catch (error) {
+    res.send(error);
+  }
+};
+//add new client or duplicate client
 exports.create = async (req, res) => {
+  const { action, currentClientID } = req.query;
+  let refUpdate = null;
+  let status = 'current';
+  if (action === 'update') {
+    refUpdate = currentClientID;
+    status = 'old';
+  }
   const {
     nom,
     prenom,
@@ -42,12 +66,16 @@ exports.create = async (req, res) => {
       date_naissance: date_naissance,
       adresse2: adresse2,
       telephone: telephone,
+      status: status,
+      refUpdate: refUpdate,
     });
     res.status(201).json(newClient);
   } catch (error) {
     res.send(error);
   }
 };
+
+//update client
 exports.update = async (req, res) => {
   const clientID = req.params.id;
   const {
@@ -80,7 +108,7 @@ exports.update = async (req, res) => {
         adresse2: adresse2,
         telephone: telephone,
         associer: associer,
-        status: 'old',
+        status: 'current',
       },
       {
         where: {
@@ -95,8 +123,8 @@ exports.update = async (req, res) => {
     res.send(error);
   }
 };
-
-exports.delete = async (req, res) => {
+//delete client
+exports.deleteUpdate = async (req, res) => {
   const clientID = req.params.id;
   try {
     await Client.update(
@@ -114,6 +142,20 @@ exports.delete = async (req, res) => {
   }
 };
 
+//delete for developement
+exports.delete = async (req, res) => {
+  const clientID = req.params.id;
+  try {
+    await Client.destroy({
+      where: {
+        idco_client: clientID,
+      },
+    });
+    res.status(204).send('deleted successfully');
+  } catch (error) {
+    res.send(error);
+  }
+};
 // exports.get = (req, res) => {};
 
 // exports.add = (req, res) => {};

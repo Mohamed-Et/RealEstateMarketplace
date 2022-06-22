@@ -46,6 +46,12 @@ const Client = sequelize.define(
       type: DataTypes.STRING(10),
       defaultValue: 'current',
     },
+    refUpdate: {
+      type: DataTypes.INTEGER(10),
+    },
+    refDelete: {
+      type: DataTypes.INTEGER(10),
+    },
   },
   {
     // Other model options go here
