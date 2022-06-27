@@ -1,12 +1,13 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../../db');
+const Vente = require('./Vente');
 
 const Client = sequelize.define(
   'Client',
   {
     // Model attributes are defined here
     idco_client: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       primaryKey: true,
       allowNull: false,
       autoIncrement: true,
@@ -65,9 +66,16 @@ const Client = sequelize.define(
 );
 //This checks what is the current state of the table in the database (which columns it has, what are their data types, etc),
 //and then performs the necessary changes in the table to make it match the model.
-Client.sync({ alter: true });
-Client.sync({ force: true });
 // `sequelize.define` also returns the model
-console.log(Client === sequelize.models.Client); // true
+//asociations needs to be in one file
+Vente.belongsTo(Client, {
+  foreignKey: 'idclient',
+});
+Client.hasMany(Vente, {
+  foreignKey: 'idclient',
+});
+// Client.sync({ alter: true });
+//! Client.sync({ force: true });
+Client.sync();
 //export module to be reused in controllers
 module.exports = sequelize.models.Client;

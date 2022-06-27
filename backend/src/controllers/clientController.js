@@ -1,4 +1,5 @@
 const Client = require('../models/Client');
+const Vente = require('../models/Vente');
 const Op = require('sequelize').Op;
 //get all
 exports.getAll = async (req, res) => {
@@ -19,7 +20,27 @@ exports.getAll = async (req, res) => {
 exports.getByID = async (req, res) => {
   const idClient = req.params.id;
   try {
-    const client = await Client.findOne({ where: { idco_client: idClient } });
+    const client = await Client.findOne({
+      where: { idco_client: idClient },
+      include: Vente,
+    });
+    res.status(200).json(client);
+  } catch (error) {
+    res.send(error);
+  }
+};
+//get by VenteID
+exports.getByVenteID = async (req, res) => {
+  const venteID = req.params.venteId;
+  try {
+    const client = await Client.findOne({
+      include: [
+        {
+          model: Vente,
+          where: { idco_vente: venteID },
+        },
+      ],
+    });
     res.status(200).json(client);
   } catch (error) {
     res.send(error);

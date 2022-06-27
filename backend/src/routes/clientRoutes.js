@@ -3,6 +3,7 @@ const router = express.Router();
 const clientCtrl = require('../controllers/clientController');
 router.get('/', clientCtrl.getAll);
 router.get('/:id', clientCtrl.getByID);
+router.get('/refVente/:venteId', clientCtrl.getByVenteID);
 router.get('/ref/:refId', clientCtrl.getByRefID);
 router.post('/', clientCtrl.create);
 router.patch('/:id', clientCtrl.update);
