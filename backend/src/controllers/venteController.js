@@ -1,5 +1,6 @@
 const Vente = require('../models/Vente');
 const Client = require('../models/Client');
+const Produit = require('../models/Produit');
 const Op = require('sequelize').Op;
 //get all
 exports.getAll = async (req, res) => {
@@ -10,7 +11,7 @@ exports.getAll = async (req, res) => {
           [Op.not]: 'deleted',
         },
       },
-      include: Client,
+      include: [Client, Produit],
     });
     res.status(200).json(ventes);
   } catch (error) {
@@ -26,7 +27,7 @@ exports.getByID = async (req, res) => {
     try {
       const vente = await Vente.findOne({
         where: { idco_vente: id },
-        include: Client,
+        include: [Client, Produit],
       });
       res.status(200).json(vente);
     } catch (error) {
@@ -36,12 +37,36 @@ exports.getByID = async (req, res) => {
     try {
       const vente = await Vente.findOne({
         where: { idclient: id },
-        include: Client,
+        include: [Client, Produit],
       });
       res.status(200).json(vente);
     } catch (error) {
       res.send(error);
     }
+  } else if (param === 'produit') {
+    try {
+      const vente = await Vente.findOne({
+        where: { idproduit: id },
+        include: [Client, Produit],
+      });
+      res.status(200).json(vente);
+    } catch (error) {
+      res.send(error);
+    }
+  }
+};
+//get by both clientID and produitID
+exports.getByClientProduitID = async (req, res) => {
+  const idclient = req.params.idclient;
+  const idproduit = req.params.idproduit;
+  try {
+    const vente = await Vente.findOne({
+      where: { idclient: idclient, idproduit: idproduit },
+      include: [Client, Produit],
+    });
+    res.status(200).json(vente);
+  } catch (error) {
+    res.send(error);
   }
 };
 //get by RefUpdateID

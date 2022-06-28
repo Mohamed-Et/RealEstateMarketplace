@@ -3,6 +3,7 @@ const router = express.Router();
 const venteCtrl = require('../controllers/venteController');
 router.get('/', venteCtrl.getAll);
 router.get('/:id', venteCtrl.getByID);
+router.get('/:idclient/:idproduit', venteCtrl.getByClientProduitID);
 router.get('/ref/:refId', venteCtrl.getByRefID);
 router.post('/', venteCtrl.create);
 router.patch('/:id', venteCtrl.update);

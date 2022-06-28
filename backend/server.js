@@ -5,6 +5,8 @@ const sequelize = require('./db');
 //routes
 const clientRoutes = require('./src/routes/clientRoutes');
 const venteRoutes = require('./src/routes/venteRoutes');
+const produitRoutes = require('./src/routes/produitRoutes');
+const vendeurProduitRoutes = require('./src/routes/vendeurProduitRoutes');
 // parse form data
 app.use(express.urlencoded({ extended: false }));
 // parse json
@@ -25,3 +27,5 @@ testConnection();
 //routes
 app.use('/api/client', clientRoutes);
 app.use('/api/vente', venteRoutes);
+app.use('/api/produit', produitRoutes);
+app.use('/api/vendeurP', vendeurProduitRoutes);

@@ -10,6 +10,7 @@ exports.getAll = async (req, res) => {
           [Op.not]: 'deleted',
         },
       },
+      include: Vente,
     });
     res.status(200).json(clients);
   } catch (error) {
