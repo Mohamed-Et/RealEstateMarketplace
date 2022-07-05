@@ -1,5 +1,5 @@
 const Vente = require('../models/Vente');
-const Client = require('../models/Client');
+const Consistance = require('../models/Consistance');
 const Produit = require('../models/Produit');
 const Op = require('sequelize').Op;
 //get all
@@ -11,7 +11,7 @@ exports.getAll = async (req, res) => {
           [Op.not]: 'deleted',
         },
       },
-      include: Vente,
+      include: [Vente, Consistance],
     });
     res.status(200).json(produits);
   } catch (error) {
@@ -25,7 +25,7 @@ exports.getByID = async (req, res) => {
   try {
     const produit = await Produit.findOne({
       where: { idco_produit: idProduit },
-      include: Vente,
+      include: [Vente, Consistance],
     });
     res.status(200).json(produit);
   } catch (error) {

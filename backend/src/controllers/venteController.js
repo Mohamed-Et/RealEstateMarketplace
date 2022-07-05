@@ -1,6 +1,7 @@
 const Vente = require('../models/Vente');
 const Client = require('../models/Client');
 const Produit = require('../models/Produit');
+const VendeurProduit = require('../models/VendeurProduit');
 const Op = require('sequelize').Op;
 //get all
 exports.getAll = async (req, res) => {
@@ -11,7 +12,7 @@ exports.getAll = async (req, res) => {
           [Op.not]: 'deleted',
         },
       },
-      include: [Client, Produit],
+      include: [Client, Produit, VendeurProduit],
     });
     res.status(200).json(ventes);
   } catch (error) {
@@ -27,7 +28,7 @@ exports.getByID = async (req, res) => {
     try {
       const vente = await Vente.findOne({
         where: { idco_vente: id },
-        include: [Client, Produit],
+        include: [Client, Produit, VendeurProduit],
       });
       res.status(200).json(vente);
     } catch (error) {
@@ -37,7 +38,7 @@ exports.getByID = async (req, res) => {
     try {
       const vente = await Vente.findOne({
         where: { idclient: id },
-        include: [Client, Produit],
+        include: [Client, Produit, VendeurProduit],
       });
       res.status(200).json(vente);
     } catch (error) {
@@ -47,7 +48,7 @@ exports.getByID = async (req, res) => {
     try {
       const vente = await Vente.findOne({
         where: { idproduit: id },
-        include: [Client, Produit],
+        include: [Client, Produit, VendeurProduit],
       });
       res.status(200).json(vente);
     } catch (error) {
@@ -62,7 +63,7 @@ exports.getByClientProduitID = async (req, res) => {
   try {
     const vente = await Vente.findOne({
       where: { idclient: idclient, idproduit: idproduit },
-      include: [Client, Produit],
+      include: [Client, Produit, VendeurProduit],
     });
     res.status(200).json(vente);
   } catch (error) {
@@ -85,7 +86,7 @@ exports.getByRefID = async (req, res) => {
 //using ?action=update&currentVenteId=TheVenteIDToReference&idclient=someID
 //!this will duplicate a row wiht refupdate referncing the current vente and status to old
 exports.create = async (req, res) => {
-  const { action, currentVenteID, idclient } = req.query;
+  const { action, currentVenteID, idclient, idproduit } = req.query;
   let refUpdate = null;
   let status = 'current';
   if (action === 'update') {
@@ -93,7 +94,6 @@ exports.create = async (req, res) => {
     status = 'old';
   }
   const {
-    idproduit,
     date,
     promotion,
     prix_vente,

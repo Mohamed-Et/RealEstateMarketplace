@@ -1,6 +1,7 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../../db');
 const Vente = require('./Vente');
+const Associer = require('./Associer');
 
 const Client = sequelize.define(
   'Client',
@@ -68,10 +69,18 @@ const Client = sequelize.define(
 //and then performs the necessary changes in the table to make it match the model.
 // `sequelize.define` also returns the model
 //asociations needs to be in one file
+//!vente
 Vente.belongsTo(Client, {
   foreignKey: 'idclient',
 });
 Client.hasMany(Vente, {
+  foreignKey: 'idclient',
+});
+//!associer
+Associer.belongsTo(Client, {
+  foreignKey: 'idclient',
+});
+Client.hasMany(Associer, {
   foreignKey: 'idclient',
 });
 // Client.sync({ alter: true });

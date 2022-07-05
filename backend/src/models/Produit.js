@@ -2,6 +2,7 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../../db');
 const Vente = require('./Vente');
 const VendeurProduit = require('./VendeurProduit');
+const Consistance = require('./Consistance');
 
 const Produit = sequelize.define(
   'Produit',
@@ -15,10 +16,6 @@ const Produit = sequelize.define(
     },
     num_produit: {
       type: DataTypes.STRING(45),
-    },
-    id_consistance: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
     },
     titre_foncier: {
       type: DataTypes.STRING(45),
@@ -83,6 +80,13 @@ VendeurProduit.belongsTo(Produit, {
 });
 Produit.hasMany(VendeurProduit, {
   foreignKey: 'idproduit',
+});
+//Consistance
+Produit.belongsTo(Consistance, {
+  foreignKey: 'idconsistance',
+});
+Consistance.hasMany(Produit, {
+  foreignKey: 'idconsistance',
 });
 Produit.sync();
 // Produit.sync({ alter: true }).catch((err) => {

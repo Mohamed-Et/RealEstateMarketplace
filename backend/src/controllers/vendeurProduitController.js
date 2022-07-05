@@ -13,7 +13,7 @@ exports.getAll = async (req, res) => {
           [Op.not]: 'deleted',
         },
       },
-      include: Produit,
+      include: [Produit, Vente],
     });
     res.status(200).json(vendeurProduit);
   } catch (error) {
@@ -29,7 +29,7 @@ exports.getByID = async (req, res) => {
     try {
       const vendeurP = await VendeurProduit.findOne({
         where: { id: id },
-        include: Produit,
+        include: [Produit, Vente],
       });
       res.status(200).json(vendeurP);
     } catch (error) {
@@ -37,9 +37,9 @@ exports.getByID = async (req, res) => {
     }
   } else if (param === 'produit') {
     try {
-      const vendeurP = await VendeurProduit.findOne({
+      const vendeurP = await VendeurProduit.findAll({
         where: { idproduit: id },
-        include: Produit,
+        include: [Produit, Vente],
       });
       res.status(200).json(vendeurP);
     } catch (error) {

@@ -1,10 +1,9 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../../db');
-const Vente = require('./Vente');
 const Produit = require('./Produit');
 
-const VendeurProduit = sequelize.define(
-  'VendeurProduit',
+const Consistance = sequelize.define(
+  'Consistance',
   {
     // Model attributes are defined here
     id: {
@@ -13,19 +12,37 @@ const VendeurProduit = sequelize.define(
       allowNull: false,
       autoIncrement: true,
     },
-    idvendeur: {
+    id_projet: {
       type: DataTypes.INTEGER,
-      allowNull: false,
     },
-    date_du: {
+    id_tranche: {
+      type: DataTypes.INTEGER,
+    },
+    id_categorie: {
+      type: DataTypes.INTEGER,
+    },
+    id_type: {
+      type: DataTypes.INTEGER,
+    },
+    nombre: {
+      type: DataTypes.INTEGER,
+    },
+    superficie: {
+      type: DataTypes.DOUBLE,
+    },
+    par: {
+      type: DataTypes.STRING(45),
+    },
+    date: {
       type: DataTypes.DATE,
-      allowNull: false,
     },
-    date_au: {
-      type: DataTypes.DATE,
-      allowNull: false,
+    projet: {
+      type: DataTypes.STRING(150),
     },
-    lieux: {
+    tranche: {
+      type: DataTypes.STRING(150),
+    },
+    categorie: {
       type: DataTypes.STRING(45),
     },
     status: {
@@ -45,25 +62,14 @@ const VendeurProduit = sequelize.define(
     },
   },
   {
-    tableName: 'co_vendeur_produit',
+    tableName: 'co_consistance',
   }
 );
-//!vente
-Vente.belongsTo(VendeurProduit, {
-  foreignKey: 'id_vendeur',
-});
-VendeurProduit.hasMany(Vente, {
-  foreignKey: 'id_vendeur',
-});
-VendeurProduit.sync();
-// VendeurProduit.sync({ alter: true }).catch((err) => {
+
+Consistance.sync();
+// Consistance.sync({ alter: true }).catch((err) => {
 //   console.log(err);
-// });
-// sequelize.query('SET FOREIGN_KEY_CHECKS = 0', { raw: true }).then(function () {
-//   sequelize.sync({ force: true }).then(function () {
-//     sequelize.query('SET FOREIGN_KEY_CHECKS = 1', { raw: true });
-//   });
 // });
 
 //export module to be reused in controllers
-module.exports = sequelize.models.VendeurProduit;
+module.exports = sequelize.models.Consistance;

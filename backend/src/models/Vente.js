@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../../db');
-const Client = require('./Client');
+const Recette = require('./Recette');
+const Associer = require('./Associer');
 
 const Vente = sequelize.define(
   'Vente',
@@ -57,9 +58,9 @@ const Vente = sequelize.define(
     observation: {
       type: DataTypes.STRING(245),
     },
-    id_vendeur: {
-      type: DataTypes.INTEGER,
-    },
+    // id_vendeur: {
+    //   type: DataTypes.INTEGER,
+    // },
     status: {
       type: DataTypes.STRING(10),
       defaultValue: 'current',
@@ -83,6 +84,20 @@ const Vente = sequelize.define(
     tableName: 'co_vente',
   }
 );
+//!associer
+Associer.belongsTo(Vente, {
+  foreignKey: 'idvente',
+});
+Vente.hasMany(Associer, {
+  foreignKey: 'idvente',
+});
+//!recette
+Recette.belongsTo(Vente, {
+  foreignKey: 'idvente',
+});
+Vente.hasMany(Recette, {
+  foreignKey: 'idvente',
+});
 Vente.sync();
 // Vente.sync({ alter: true }).catch((err) => {
 //   console.log(err);
