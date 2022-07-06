@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 //db instance
@@ -11,6 +12,9 @@ const associerRoutes = require('./src/routes/associerRoutes');
 const recetteRoutes = require('./src/routes/recetteRoutes');
 const versementRoutes = require('./src/routes/versementRoutes');
 const consistanceRoutes = require('./src/routes/consistanceRoutes');
+const utlisateurRoutes = require('./src/routes/utlilisateurRoutes');
+//auth middleware
+const authMiddleware = require('./src/middlewares/auth');
 // parse form data
 app.use(express.urlencoded({ extended: false }));
 // parse json
@@ -29,7 +33,7 @@ const testConnection = async () => {
 testConnection();
 
 //routes
-app.use('/api/client', clientRoutes);
+app.use('/api/client', authMiddleware, clientRoutes);
 app.use('/api/vente', venteRoutes);
 app.use('/api/produit', produitRoutes);
 app.use('/api/vendeurP', vendeurProduitRoutes);
@@ -37,3 +41,4 @@ app.use('/api/associer', associerRoutes);
 app.use('/api/recette', recetteRoutes);
 app.use('/api/versement', versementRoutes);
 app.use('/api/consistance', consistanceRoutes);
+app.use('/api/utilisateur', utlisateurRoutes);
