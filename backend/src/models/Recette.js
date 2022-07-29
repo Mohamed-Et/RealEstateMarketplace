@@ -63,7 +63,7 @@ Versement.belongsTo(Recette, {
 Recette.hasMany(Versement, {
   foreignKey: 'idrecette',
 });
-// Recette.sync({ alter: true }).catch((err) => {
+// Recette.sync({ force: true }).catch((err) => {
 //   console.log(err);
 // });
 Recette.sync();

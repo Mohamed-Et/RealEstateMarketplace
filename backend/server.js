@@ -15,6 +15,19 @@ const consistanceRoutes = require('./src/routes/consistanceRoutes');
 const utlisateurRoutes = require('./src/routes/utlilisateurRoutes');
 //auth middleware
 const authMiddleware = require('./src/middlewares/auth');
+//CORS
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization'
+  );
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PUT, DELETE, PATCH, OPTIONS'
+  );
+  next();
+});
 // parse form data
 app.use(express.urlencoded({ extended: false }));
 // parse json
@@ -33,7 +46,8 @@ const testConnection = async () => {
 testConnection();
 
 //routes
-app.use('/api/client', authMiddleware, clientRoutes);
+//app.use('/api/client', authMiddleware, clientRoutes); //!test
+app.use('/api/client', clientRoutes);
 app.use('/api/vente', venteRoutes);
 app.use('/api/produit', produitRoutes);
 app.use('/api/vendeurP', vendeurProduitRoutes);
